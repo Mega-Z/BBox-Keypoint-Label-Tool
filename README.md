@@ -30,19 +30,19 @@ python bbox-keypoint-label.py
 
 输入图片路径，点击Load；
 
-![image-20210919112513383](https://github.com/Mega-Z/BBox-Keypoint-Label-Tool/tree/main/README.assets\image-20210919112513383.png)
+![image-20210919112513383](README.assets/image-20210919112513383.png)
 
 点击图片标注边界框；
 
-![image-20210919112618984](https://github.com/Mega-Z/BBox-Keypoint-Label-Tool/tree/main/README.assets\image-20210919112618984.png)
+![image-20210919112618984](README.assets/image-20210919112618984.png)
 
 选择边界框，标注对应边界框的关键点；
 
-![image-20210919112710283](https://github.com/Mega-Z/BBox-Keypoint-Label-Tool/tree/main/README.assets\image-20210919112710283.png)
+![image-20210919112710283](README.assets/image-20210919112710283.png)
 
 切换图片时自动保存，保存格式如下，每一行对应一个目标的边界框，前四个数字为边界框参数，之后依次是各个关键点坐标。
 
-![image-20210919112814458](https://github.com/Mega-Z/BBox-Keypoint-Label-Tool/tree/main/README.assets\image-20210919112814458.png)
+![image-20210919112814458](README.assets/image-20210919112814458.png)
 
 ## 参考
 
