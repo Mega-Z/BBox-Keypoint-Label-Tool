@@ -85,6 +85,7 @@ class LabelTool():
         self.mainPanel.bind("<Motion>", self.mouseMove)
         # press <Espace> to cancel current bbox
         self.parent.bind("<Escape>", self.cancelBBox)
+        self.parent.bind("<Button-3>", self.nextPoint)
         self.parent.bind("s", self.cancelBBox)
         self.parent.bind("a", self.prevImage)  # press 'a' to go backforward
         self.parent.bind("d", self.nextImage)  # press 'd' to go forward
@@ -271,6 +272,10 @@ class LabelTool():
                     string = '(%.2f,%.2f)-(%.2f,%.2f)' % (tmp[0], tmp[1], tmp[2], tmp[3])
                     point_num = (len(tmp)-4) // 2
                     for j in range(point_num):
+                        if tmp[4+j*2] < 0:
+                            IdList.append(None)
+                            string += ' (%.2f,%.2f)' % (-1, -1)
+                            continue
                         txi = int(tmp[4+j*2]*DEST_SIZE[0])
                         tyi = int(tmp[4+j*2+1]*DEST_SIZE[1])
                         point = self.mainPanel.create_oval(txi-3, tyi-3, txi+3, tyi+3, width=2, fill='black',
@@ -290,6 +295,8 @@ class LabelTool():
         with open(self.labelfilename, 'w') as f:
             # f.write('%d\n' % len(self.bboxList))
             for bbox in self.bboxList:
+                while len(bbox) < 4+keypoint_num*2:
+                    bbox.append(-1)
                 f.write(' '.join(map(str, bbox)) + '\n')
         print('Image No. %d saved' % (self.cur))
 
@@ -403,6 +410,29 @@ class LabelTool():
                 self.mainPanel.delete(self.bboxId)
                 self.bboxId = None
                 self.STATE['click'] = 0
+
+    def nextPoint(self, event):
+        print("next")
+        sel = self.listbox.curselection()
+        if len(sel) != 1:
+            return
+        idx = int(sel[0])
+        string = self.listbox.get(idx)
+        if self.STATE['point'] == 1 and len(self.bboxIdList[idx]) >= keypoint_num + 1:
+            self.clearKPnt()
+            string = string[:23]
+            self.bboxList[idx] = self.bboxList[idx][:4]
+        string += ' (%.2f,%.2f)' % (-1, -1)
+        self.bboxList[idx].append(-1)
+        self.bboxList[idx].append(-1)
+        self.bboxIdList[idx].append(None)
+        self.listbox.delete(idx)
+        self.listbox.insert(idx, string)
+        self.listbox.select_set(idx)
+        if self.STATE['point'] >= keypoint_num:
+            self.STATE['point'] = 0
+        else:
+            self.STATE['point'] += 1
 
     def delBBox(self):
         sel = self.listbox.curselection()
